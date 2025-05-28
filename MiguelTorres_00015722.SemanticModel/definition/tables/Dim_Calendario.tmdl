@@ -1,6 +1,18 @@
 table Dim_Calendario
 	lineageTag: 3b00acaa-b90c-4e14-94db-d99e19606809
 
+	measure IngresosPorModelo = ```
+			
+			CALCULATE(
+			    SUM(Fact_Ventas[Precio Venta sin IGV]),
+			    ALLEXCEPT(Fotos_Vehiculos, Fotos_Vehiculos[Modelo])
+			)
+			
+			```
+		lineageTag: 3b279118-0458-4bb6-a4f5-d84396dbc696
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column Fecha
 		dataType: dateTime
 		formatString: Long Date
@@ -40,6 +52,9 @@ table Dim_Calendario
 		lineageTag: df3c5bd6-c6ba-4208-a00b-183b7cb7bc66
 		summarizeBy: none
 		sourceColumn: Mes
+		sortByColumn: 'Numero Mes'
+
+		changedProperty = SortByColumn
 
 		annotation SummarizationSetBy = Automatic
 

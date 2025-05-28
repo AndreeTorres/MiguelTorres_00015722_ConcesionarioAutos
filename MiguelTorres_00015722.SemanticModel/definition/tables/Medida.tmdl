@@ -1,0 +1,92 @@
+table Medida
+	lineageTag: cb732339-c0e2-4b90-9e7d-cf2a237e06b5
+
+	measure TOTAL_CAR = SUMX(Fact_Ventas, Fact_Ventas[Precio Venta sin IGV] * (1 + Fact_Ventas[IGV]))
+		lineageTag: b79b813e-915f-4556-9094-2d60b3c03b2a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CANTIDAD_CANALES = COUNT(dim_canal[canal])
+		formatString: 0
+		lineageTag: 7d109bd5-4449-4225-b657-82ec8c4c3149
+
+	measure CANT_MODELOS = ```
+			
+			COUNTROWS(
+			    FILTER(
+			        SUMMARIZE(
+			            Hoja1,
+			            Hoja1[Modelo],
+			            "ModeloLimpio", TRIM(UPPER(Hoja1[Modelo]))
+			        ),
+			        NOT ISBLANK([ModeloLimpio])
+			    )
+			)
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: 59a1f323-1007-42e3-aa24-5931af4465fa
+
+	measure MODELOS_UNICOS = ```
+			DISTINCTCOUNT(Fotos_Vehiculos[Modelo])
+			
+			```
+		formatString: 0
+		lineageTag: 44c18450-b0e0-4f56-b601-cd6ad930a11f
+
+	measure TOTAL_INGRESOS = SUM(Hoja1[Precio])
+		formatString: 0
+		lineageTag: e0236bbb-1b63-429e-812b-71441b71667f
+
+	measure Medida
+		lineageTag: 9496682e-fd0e-49df-969e-5f69f727239a
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure INGRESOS = ```
+			
+			CALCULATE(
+			    SUM(Hoja1[Precio]),
+			    NOT ISBLANK(Hoja1[Modelo])
+			)
+			
+			
+			```
+		formatString: 0
+		lineageTag: 3f975834-f583-458d-9d1a-1b19b90f1d65
+
+	measure INGRESOSXMODELO = SUM(Fact_Ventas[Precio Venta sin IGV])
+		lineageTag: 5a843134-5c59-48a7-9b6c-224124e64338
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure TOTAL_VENTAS = COUNTROWS(Fact_Ventas)
+		formatString: 0
+		lineageTag: 14ccd68f-3497-4af6-b7ed-ff2212167256
+
+	measure AVG_PER_CANAL = AVERAGE(Fact_Ventas[Precio Venta sin IGV])
+		lineageTag: 685720cc-f12b-49cb-8174-ad13222ae15a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CANT_VENDEDORES = COUNT(Dim_Vendedor[Vendedor])
+		formatString: 0
+		lineageTag: d0cbd5f7-9193-4b9d-98e2-be772193bf88
+
+	column Column
+		formatString: 0
+		lineageTag: 742b4df9-f23a-4f7d-a010-9efd47140533
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medida = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = ddfa84d38a774f579eba5bf60f4d76b1
+

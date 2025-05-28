@@ -29,6 +29,7 @@ ref table Hoja1
 ref table LocalDateTable_e9218bf4-bf2f-43ae-a89f-dec33d2a4900
 ref table LocalDateTable_f69f899d-8cac-4c97-81fe-dd3467599618
 ref table Fact_Ventas
+ref table Medida
 
 ref cultureInfo en-US
 
